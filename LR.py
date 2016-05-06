@@ -26,11 +26,11 @@ y = T.vector("y")
 alpha = T.dscalar("alpha")
 
 # initial weights and bias
-w = theano.shared(np.random.randn(iris.shape[1]-1), name='w')
+w = theano.shared(np.zeros(iris.shape[1]-1), name='w')
 b = theano.shared(0.,name='b')
 print """initial weights and bias: 
-w = {0}
-b = {1}""".format(w.get_value(),b.get_value())
+   w = {0}
+   b = {1}""".format(w.get_value(),b.get_value())
 print "--------------------------------------------------------"
 
 #calculate probability and cost 
@@ -54,19 +54,29 @@ predict = theano.function(
 )
 
 #iters = 1000
-for i in range(int(sys.argv[2])):
-   pre, err, cs = train(iris.ix[:,0:4], np.where(iris.Species=='setosa',1,0), alpha=float(sys.argv[1]))
+if len(sys.argv) < 3 :
+   #print 'len(sys.argv) = {0} : learning_rate={1}, iters={2}'.format(len(sys.argv), sys.argv[1], sys.argv[2])
+   print 'please input learning rate and the max iters:'
+else:
+   print """len(sys.argv) = {0} :
+   learning_rate={1}
+   iters={2}""".format(len(sys.argv), sys.argv[1], sys.argv[2])
+   for i in range(int(sys.argv[2])):
+      pre, err, cs = train(iris.ix[:,0:4], np.where(iris.Species=='setosa',1,0), alpha=float(sys.argv[1]))
 
+   print '--------------------------------------------------------'
 #predict(iris.ix[:,0:4])
-print """weights and bias after training:
-w = {0}
-b = {1}""".format(w.get_value(),b.get_value())
+   print """weights and bias after training:
+   w = {0}
+   b = {1}""".format(w.get_value(),b.get_value())
 
-fpr, tpr , thresholds = metrics.roc_curve(np.where(iris.Species=='setosa',1,0), predict(iris.ix[:,0:4])[0])
+   fpr, tpr , thresholds = metrics.roc_curve(np.where(iris.Species=='setosa',1,0), predict(iris.ix[:,0:4])[0])
 
-print "AUC = {0}".format(metrics.auc(fpr,tpr))
-plt.plot(fpr, tpr, linestyle ='--', color = 'b', marker = 'o', markersize=10)
-plt.ylim(-0.1,1.1)
-plt.xlim(-0.1,1.1)
-plt.show()
+   print '--------------------------------------------------------'
+   print "AUC = {0}".format(metrics.auc(fpr,tpr))
+   plt.plot(fpr, tpr, linestyle ='--', color = 'b', marker = 'o', markersize=10)
+   plt.ylim(-0.1,1.1)
+   plt.xlim(-0.1,1.1)
+   plt.show()
+
 
