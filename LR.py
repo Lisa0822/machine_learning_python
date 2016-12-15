@@ -1,7 +1,7 @@
-#########################################
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 
+######################################
 # LR: logistic regression
 # Author: Lisa
 # Date: 2016-04-27

@@ -1,7 +1,7 @@
-#######################################
 #!/usr/bin/python
 #-*- coding:UTF-8 -*-
 
+######################################
 # KNN: classify hand-writing data
 # Author: Lisa
 # Date: 2016-04-12
